@@ -1,0 +1,196 @@
+﻿@model IEnumerable<ProyectoLogin.Models.ProductosPan>
+
+@{
+    ViewData["Title"] = "Lista de Productos";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Panadería E.D</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 60px; /* Espacio para el menú de navegación fijo si lo tienes */
+        }
+
+        .accordion-button {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+            .accordion-button:not(.collapsed) {
+                background-color: #0056b3;
+            }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+            .btn-success:hover {
+                background-color: #218838;
+            }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+        }
+
+            .btn-warning:hover {
+                background-color: #e0a800;
+            }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+            }
+
+        .input-group input[type="number"] {
+            max-width: 80px;
+        }
+
+        .badge {
+            font-size: 0.9rem;
+        }
+
+        .accordion-item {
+            margin-bottom: 1rem;
+        }
+
+        .accordion-body {
+            padding: 1rem;
+        }
+
+        .btn-outline-secondary {
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+            .btn-outline-secondary:hover {
+                background-color: #007bff;
+                color: #ffffff;
+            }
+
+        .form-control {
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>@ViewData["Title"]</h2>
+
+        <!-- Botones para acciones globales -->
+        <div class="mb-3">
+            <a asp-action="Create" class="btn btn-success">Crear Nuevo Producto</a>
+            <a asp-action="VerCarrito" class="btn btn-primary">Ver Carrito</a>
+        </div>
+
+        <!-- Formulario de búsqueda -->
+        <form id="searchForm" class="mb-3">
+            <div class="input-group">
+                <input type="text" id="searchInput" class="form-control" name="searchString" placeholder="Buscar producto..." />
+                <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+            </div>
+        </form>
+
+        <!-- Acordeón para cada producto -->
+        <div class="accordion" id="productosAccordion">
+            @foreach (var producto in Model)
+            {
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading-@producto.Id">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@producto.Id" aria-expanded="false" aria-controls="collapse-@producto.Id">
+                            @producto.Nombre - C$ @producto.Precio
+                        </button>
+                    </h2>
+                    <div id="collapse-@producto.Id" class="accordion-collapse collapse" aria-labelledby="heading-@producto.Id" data-bs-parent="#productosAccordion">
+                        <div class="accordion-body">
+                            <p><strong>Precio:</strong> C$ @producto.Precio</p>
+                            <p>
+                                <strong>Cantidad Disponible:</strong>
+                                @if (producto.Cantidad > 0)
+                                {
+                                    @producto.Cantidad
+                                }
+                                else
+                                {
+                                    <span class="text-danger">Producto Agotado</span>
+                                }
+                            </p>
+
+                            <!-- Botones de acciones (Edit, Delete) -->
+                            <div class="mb-3">
+                                <a asp-action="Edit" asp-route-id="@producto.Id" class="btn btn-warning">Editar</a>
+                                <a asp-action="Delete" asp-route-id="@producto.Id" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">Eliminar</a>
+                            </div>
+
+                            <!-- Formulario para agregar al carrito -->
+                            @if (producto.Cantidad > 0)
+                            {
+                                <form asp-action="AgregarAlCarrito" method="post">
+                                    <input type="hidden" name="id" value="@producto.Id" />
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="cantidad" value="1" min="1" max="@producto.Cantidad" />
+                                        <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
+                                    </div>
+                                </form>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary" disabled>Agotado</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#searchForm").on("submit", function (e) {
+                e.preventDefault(); // Evitar el envío del formulario
+
+                var searchString = $("#searchInput").val();
+
+                $.ajax({
+                    url: '@Url.Action("Index", "ProductosPan")',
+                    type: 'GET',
+                    data: { searchString: searchString },
+                    success: function (data) {
+                        $("#productosAccordion").html(data);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

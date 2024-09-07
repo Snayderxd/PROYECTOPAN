@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Eliminación Exitosa";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    <div class="alert alert-success">
+        <h4 class="alert-heading">Producto Eliminado</h4>
+        <p>El producto ha sido eliminado exitosamente.</p>
+    </div>
+
+    <a href="@Url.Action("Index", "ProductosPan")" class="btn btn-primary">Regresar a la Lista</a>
+</div>

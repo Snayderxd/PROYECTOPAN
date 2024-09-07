@@ -1,0 +1,52 @@
+﻿@model ProyectoLogin.Models.Carrito
+
+@{
+    ViewData["Title"] = "Pagar";
+}
+
+<div class="container mt-4">
+    <h2>Seleccionar Método de Pago</h2>
+
+    <form asp-action="ConfirmacionPago" method="post">
+        <div class="form-group">
+            <label for="metodoPago">Método de Pago:</label>
+            <select id="metodoPago" name="metodoPago" class="form-control">
+                <option value="tarjeta">Tarjeta de Crédito</option>
+                <option value="paypal">PayPal</option>
+                <option value="transferencia">Transferencia Bancaria</option>
+            </select>
+        </div>
+
+        <div id="tarjeta-pago" class="payment-methods" style="display:none;">
+            <div class="form-group">
+                <label for="numeroTarjeta">Número de Tarjeta:</label>
+                <input type="text" id="numeroTarjeta" name="numeroTarjeta" class="form-control" placeholder="1234 5678 9012 3456" />
+            </div>
+            <div class="form-group">
+                <label for="fechaExpiracion">Fecha de Expiración:</label>
+                <input type="text" id="fechaExpiracion" name="fechaExpiracion" class="form-control" placeholder="MM/AA" />
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" name="cvv" class="form-control" placeholder="123" />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Confirmar Pago</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('metodoPago').addEventListener('change', function () {
+            var metodoPago = this.value;
+            var tarjetaPago = document.getElementById('tarjeta-pago');
+
+            if (metodoPago === 'tarjeta') {
+                tarjetaPago.style.display = 'block';
+            } else {
+                tarjetaPago.style.display = 'none';
+            }
+        });
+    </script>
+}

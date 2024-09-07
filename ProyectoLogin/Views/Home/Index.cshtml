@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Panadería E.D</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Evita el desbordamiento horizontal */
+        }
+
+        .open-btn {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+            background-color: #333;
+            padding: 10px;
+            border: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            background-color: #333;
+            padding-top: 20px;
+            transition: left 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        .sidebar a {
+            padding: 15px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: white;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .sidebar .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+        }
+
+        .open-sidebar {
+            left: 0;
+        }
+
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 80vh; /* Ajuste del alto del banner */
+            background-color: #333;
+            color: #fff;
+            padding: 50px 0; /* Ajusta el padding */
+            margin: 0;
+            position: relative; /* Necesario para los elementos absolutamente posicionados dentro del banner */
+        }
+
+        .hero-section img {
+            max-width: 200px; /* Ajuste del tamaño de la imagen */
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            animation: breathe 3s infinite; /* Aplica la animación de respiración */
+        }
+
+        @@keyframes breathe {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .hero-section .btn-primary {
+            background-color: #f8b400;
+            color: #fff;
+            border: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+            border-radius: 5px; /* Borde redondeado */
+        }
+
+        .hero-section .btn-primary:hover {
+            background-color: #e0a900;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="open-btn" onclick="toggleSidebar()">&#9776; Menú</button>
+
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="close-btn" onclick="toggleSidebar()">&times;</a>
+        <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        <a asp-area="" asp-controller="ProductosPan" asp-action="Index">Productos de Pan</a>
+        <a asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+        <a asp-area="" asp-controller="Home" asp-action="CerrarSesion">Cerrar Sesión</a>
+    </div>
+
+    <section class="hero-section">
+        <div class="container text-center">
+            <img src="/imagenes/logo2.png" alt="Logo Panadería E.D">
+            <p id="welcome-message" class="lead fade-in">Bienvenidos a Panadería E.D</p>
+            <a href="#" class="btn btn-primary">Descubre más</a>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            const heroSection = document.querySelector(".hero-section");
+
+            if (sidebar.classList.contains("open-sidebar")) {
+                sidebar.classList.remove("open-sidebar");
+                heroSection.style.marginLeft = "0";
+            } else {
+                sidebar.classList.add("open-sidebar");
+                heroSection.style.marginLeft = "250px";
+            }
+        }
+
+        const messages = [
+            "Bienvenidos a Panadería E.D",
+            "Welcome to Panadería E.D",
+            "Bienvenido a Panadería E.D",
+            "Willkommen bei Panadería E.D",
+            "Bienvenue chez Panadería E.D",
+            "¡Hola desde Panadería E.D!",
+            "Bonjour de Panadería E.D!",
+            "Ciao da Panadería E.D!",
+            "Olá de Panadería E.D!",
+            "こんにちは パナデリア E.D へようこそ!",
+            "안녕하세요 Panadería E.D 에 오신 것을 환영합니다!"
+        ];
+
+        let currentIndex = 0;
+
+        function changeMessage() {
+            const welcomeMessage = document.getElementById("welcome-message");
+            welcomeMessage.classList.remove('fade-in'); // Remueve la clase para reiniciar la animación
+            void welcomeMessage.offsetWidth; // Fuerza la refluencia
+            welcomeMessage.classList.add('fade-in'); // Añade la clase para animar
+
+            welcomeMessage.textContent = messages[currentIndex];
+            currentIndex = (currentIndex + 1) % messages.length;
+        }
+
+        setInterval(changeMessage, 3000); // Cambia el intervalo a 3 segundos para un tiempo más largo
+    </script>
+
+</body>
+
+</html>

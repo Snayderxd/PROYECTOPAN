@@ -1,0 +1,17 @@
+﻿@model ProyectoLogin.Models.Usuario
+
+@{
+    ViewData["Title"] = "Suspensión Exitosa";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h2 class="card-title">@ViewData["Title"]</h2>
+        </div>
+        <div class="card-body">
+            <h4>La cuenta del usuario ha sido suspendida exitosamente.</h4>
+            <a asp-action="Index" class="btn btn-primary">Volver a la lista de usuarios</a>
+        </div>
+    </div>
+</div>

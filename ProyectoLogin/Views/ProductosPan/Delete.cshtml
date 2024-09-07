@@ -1,0 +1,25 @@
+﻿@model ProyectoLogin.Models.ProductosPan
+
+@{
+    ViewData["Title"] = "Eliminar Producto";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">Confirmar Eliminación</h4>
+        <p>¿Estás seguro de que quieres eliminar este producto?</p>
+        <ul class="list-unstyled">
+            <li><strong>Nombre:</strong> @Model.Nombre</li>
+            <li><strong>Precio:</strong> @Model.Precio.ToString("C")</li>
+        </ul>
+    </div>
+
+    <form asp-action="Delete" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="@Url.Action("Index")" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

@@ -1,0 +1,32 @@
+Yo use sql server de microsft, por que se me resulta mas facil de utilizar.
+
+Base de datos con Sql Server.
+
+CREATE DATABASE DBPRUEBA
+
+USE DBPRUEBA
+
+CREATE TABLE USUARIO(
+IdUsuario int primar key identity,
+NombreUsuario varchar(50),
+Correo varchar(50),
+Clave varchar(100),
+)
+
+Cambios-
+
+Base de datos de los Productos
+CREATE TABLE ProductosPan (
+
+    Id INT PRIMARY KEY IDENTITY(1,1),  -- Llave primaria con auto incremento
+
+    Nombre NVARCHAR(100) NOT NULL,      -- Campo requerido para el nombre
+
+    Cantidad INT CHECK (Cantidad BETWEEN 0 AND 1000),  -- Campo cantidad con rango entre 0 y 1000
+
+    Precio DECIMAL(18, 2) NOT NULL      -- Campo requerido para el precio con formato de moneda
+
+);
+
+Se agrego Vistas para la administracion de Productos de pan, 
+donde se puede integrar productos, editarlos, eliminarlos etc.

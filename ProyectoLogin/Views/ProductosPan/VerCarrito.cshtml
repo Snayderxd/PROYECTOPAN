@@ -1,0 +1,125 @@
+﻿@model ProyectoLogin.Models.Carrito
+
+@{
+    ViewData["Title"] = "Carrito de Compras";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Panadería E.D</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .accordion-button {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+            .accordion-button:not(.collapsed) {
+                background-color: #0056b3;
+            }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+            .btn-success:hover {
+                background-color: #218838;
+            }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+            }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .total-price {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>@ViewData["Title"]</h2>
+
+        <div class="accordion" id="carritoAccordion">
+            @if (Model.Items.Any())
+            {
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Ver Productos en el Carrito
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#carritoAccordion">
+                        <div class="accordion-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Precio (C$)</th>
+                                        <th>Cantidad</th>
+                                        <th>Total (C$)</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Items)
+                                    {
+                                        <tr>
+                                            <td>@item.Producto.Nombre</td>
+                                            <td>C$ @item.Precio</td>
+                                            <td>@item.Cantidad</td>
+                                            <td>C$ @(item.Precio * item.Cantidad)</td>
+                                            <td>
+                                                <form asp-action="EliminarDelCarrito" method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto del carrito?');">
+                                                    <input type="hidden" name="productoId" value="@item.ProductoId" />
+                                                    <input type="hidden" name="carritoId" value="@item.CarritoId" />
+                                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <h4 class="total-price">Total a Pagar: C$ @Model.Items.Sum(i => i.Precio * i.Cantidad)</h4>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p>No hay productos en el carrito.</p>
+            }
+        </div>
+
+        <a asp-action="RealizarPago" class="btn btn-success mt-3">Proceder al Pago</a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+</body>
+</html>
